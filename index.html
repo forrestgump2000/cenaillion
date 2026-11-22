@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Cenaillion — The Rarest WWE Answer Wins</title>
+  <meta name="description" content="Seven WWE categories. 25 seconds each. Name the rarest answer you can — from the Entrance Ramp to One in a Cenaillion." />
+  <meta name="theme-color" content="#0b0b14" />
+  <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta property="og:title" content="Cenaillion" />
+  <meta property="og:description" content="Name the rarest WWE answer. Can you get One in a Cenaillion?" />
+  <meta property="og:image" content="/og-image.png" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="/og-image.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <button class="logo-sm" id="homeBtn" aria-label="Home">CENAILLION</button>
+    <div class="top-actions">
+      <button class="icon-btn" id="soundBtn" aria-label="Toggle sound">🔊</button>
+      <button class="icon-btn" id="helpBtn" aria-label="How to play">?</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- HOME -->
+    <section id="screen-home" class="screen active">
+      <img src="/icon.svg" class="hero-icon" alt="" />
+      <h1 class="logo">CENAILLION</h1>
+      <p class="tagline">7 WWE categories. 25 seconds each.<br />Name the <b>rarest</b> answer you can think of.</p>
+      <div class="mode-btns">
+        <button class="btn primary" id="dailyBtn">Daily Card</button>
+        <button class="btn" id="randomBtn">Random Match</button>
+      </div>
+      <p class="sub" id="dailyNote"></p>
+      <div class="legend" id="legend"></div>
+      <p class="sub small" id="bestNote"></p>
+      <p class="sub small"><span id="catCount"></span> categories in the locker room</p>
+    </section>
+
+    <!-- GAME -->
+    <section id="screen-game" class="screen">
+      <div class="hud">
+        <div class="pips" id="pips"></div>
+        <div class="score"><span id="scoreVal">0</span> pts</div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-label">Category <span id="roundNum">1</span>/7</div>
+        <h2 id="catName">—</h2>
+        <p class="cat-hint" id="catHint"></p>
+        <div class="timer"><div class="timer-fill" id="timerFill"></div><span id="timerText">25</span></div>
+      </div>
+
+      <div class="arena-wrap">
+        <div class="arena" id="arena">
+          <svg viewBox="0 0 360 400" class="arena-svg" aria-hidden="true">
+            <defs>
+              <radialGradient id="spot" cx="50%" cy="45%" r="60%">
+                <stop offset="0%" stop-color="#2a2a52" />
+                <stop offset="100%" stop-color="#0b0b14" />
+              </radialGradient>
+              <linearGradient id="mat" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#f4f1ea" />
+                <stop offset="1" stop-color="#d8d3c6" />
+              </linearGradient>
+            </defs>
+            <rect width="360" height="400" fill="url(#spot)" />
+            <!-- z6 stands -->
+            <g class="zone" data-z="6">
+              <rect class="zone-bg" x="6" y="6" width="348" height="62" rx="10" />
+              <g class="crowd" id="crowd"></g>
+            </g>
+            <!-- z5 front row -->
+            <g class="zone" data-z="5">
+              <rect class="zone-bg" x="20" y="74" width="320" height="30" rx="8" />
+              <g id="seats"></g>
+              <rect x="20" y="106" width="320" height="4" fill="#3a3a5c" />
+            </g>
+            <!-- z4 commentary -->
+            <g class="zone" data-z="4">
+              <rect class="zone-bg" x="96" y="116" width="168" height="28" rx="6" />
+              <rect x="110" y="126" width="140" height="14" rx="2" fill="#1c1c30" stroke="#55557a" />
+              <rect x="122" y="119" width="22" height="9" rx="1" fill="#6ad1ff" opacity=".7" />
+              <rect x="169" y="119" width="22" height="9" rx="1" fill="#6ad1ff" opacity=".7" />
+              <rect x="216" y="119" width="22" height="9" rx="1" fill="#6ad1ff" opacity=".7" />
+            </g>
+            <!-- z2 apron -->
+            <g class="zone" data-z="2">
+              <rect class="zone-bg apron" x="88" y="152" width="184" height="150" rx="4" />
+              <rect x="88" y="290" width="184" height="12" fill="#c8102e" opacity=".9" />
+              <text x="180" y="299.5" class="apron-text">CENAILLION</text>
+            </g>
+            <!-- z3 ring -->
+            <g class="zone" data-z="3">
+              <rect class="zone-bg ringmat" x="102" y="164" width="156" height="122" fill="url(#mat)" />
+              <circle cx="180" cy="225" r="26" fill="none" stroke="#c8102e" stroke-width="3" opacity=".55" />
+              <text x="180" y="231" class="ring-logo">C</text>
+              <g class="ropes">
+                <rect x="98" y="160" width="164" height="130" fill="none" stroke="#e23b4e" stroke-width="2.4" />
+                <rect x="103" y="165" width="154" height="120" fill="none" stroke="#f5f5f5" stroke-width="1.6" opacity=".8" />
+                <rect x="108" y="170" width="144" height="110" fill="none" stroke="#3b6cff" stroke-width="1.6" opacity=".8" />
+              </g>
+              <circle cx="98" cy="160" r="4" fill="#ddd" /><circle cx="262" cy="160" r="4" fill="#ddd" />
+              <circle cx="98" cy="290" r="4" fill="#ddd" /><circle cx="262" cy="290" r="4" fill="#ddd" />
+            </g>
+            <!-- z1 ramp -->
+            <g class="zone" data-z="1">
+              <path class="zone-bg" d="M150 308 L210 308 L250 394 L110 394 Z" />
+              <path d="M160 312 L200 312 L232 392 L128 392 Z" fill="#1d1d33" stroke="#4a4a77" />
+              <line x1="180" y1="314" x2="180" y2="390" stroke="#ffd23f" stroke-dasharray="4 6" opacity=".5" />
+            </g>
+          </svg>
+          <div class="zone-tags" id="zoneTags"></div>
+          <div class="token" id="token"><span>★</span></div>
+          <div class="land-pop" id="landPop"></div>
+        </div>
+      </div>
+
+      <form id="answerForm" class="answer-form" autocomplete="off">
+        <input id="answerInput" type="text" placeholder="Type the rarest answer…" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="go" />
+        <button class="btn primary" type="submit" id="submitBtn">Lock in</button>
+      </form>
+      <p class="feedback" id="feedback"></p>
+
+      <div class="result" id="result" hidden>
+        <div class="result-main">
+          <div class="result-answer" id="resAnswer"></div>
+          <div class="result-tier" id="resTier"></div>
+        </div>
+        <div class="result-more" id="resMore"></div>
+        <button class="btn primary" id="nextBtn">Next category →</button>
+      </div>
+    </section>
+
+    <!-- END -->
+    <section id="screen-end" class="screen">
+      <h2 class="end-title">Final Bell</h2>
+      <div class="final-score"><span id="finalScore">0</span><small>/ 700</small></div>
+      <div class="rank" id="rankName"></div>
+      <div class="emoji-line" id="emojiLine"></div>
+      <ol class="recap" id="recap"></ol>
+      <div class="mode-btns">
+        <button class="btn primary" id="shareBtn">Share result</button>
+        <button class="btn" id="againBtn">Random Match</button>
+      </div>
+      <p class="sub small" id="shareNote"></p>
+    </section>
+  </main>
+
+  <dialog id="helpDlg">
+    <h3>How to play</h3>
+    <p>You get <b>7 random WWE categories</b> and <b>25 seconds</b> for each. Type an answer that fits — the rarer it is, the further it climbs into the arena.</p>
+    <div class="legend" id="legend2"></div>
+    <p>Wrong or unknown answers don't end your turn — keep firing until the clock runs out. Nicknames and last names usually work (e.g. "Taker", "Stone Cold", "Cena").</p>
+    <p>The <b>Daily Card</b> is the same for everyone each day. <b>Random Match</b> is endless.</p>
+    <button class="btn primary" id="closeHelp">Got it</button>
+  </dialog>
+
+  <script src="/js/aliases.js"></script>
+  <script src="/js/data/core.js"></script>
+  <script src="/js/data/titles.js"></script>
+  <script src="/js/data/history.js"></script>
+  <script src="/js/data/people.js"></script>
+  <script src="/js/data/misc.js"></script>
+  <script src="/js/data/more.js"></script>
+  <script src="/js/data/more2.js"></script>
+  <script src="/js/data/more3.js"></script>
+  <script src="/js/game.js"></script>
+</body>
+</html>
