@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Cenaillion — The Rarest WWE Answer Wins</title>
   <meta name="description" content="Seven WWE categories. 25 seconds each. Name the rarest answer you can — from the Entrance Ramp to One in a Cenaillion." />
-  <meta name="theme-color" content="#0b0b14" />
+  <meta name="theme-color" content="#07060f" />
   <link rel="icon" type="image/svg+xml" href="/icon.svg" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -18,150 +18,130 @@
   <meta name="twitter:image" content="https://cenaillion.vercel.app/og-image.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
-  <header class="topbar">
-    <button class="logo-sm" id="homeBtn" aria-label="Home">CENAILLION</button>
-    <div class="top-actions">
-      <button class="icon-btn" id="soundBtn" aria-label="Toggle sound">🔊</button>
-      <button class="icon-btn" id="helpBtn" aria-label="How to play">?</button>
+  <canvas id="bg" aria-hidden="true"></canvas>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <!-- HOME -->
+  <section id="screen-home" class="screen active">
+    <div class="corner-btns">
+      <button class="px-icon" id="soundBtn" aria-label="Toggle sound">🔊</button>
+      <button class="px-icon" id="helpBtn" aria-label="How to play">?</button>
     </div>
-  </header>
+    <div class="home-inner">
+      <div class="marquee">** LIVE TONIGHT **</div>
+      <h1 class="logo" data-text="CENAILLION">CENAILLION</h1>
+      <div class="sublogo">THE DAILY MAIN EVENT</div>
+      <p class="tagline">7 categories · 25 seconds each · rarer answers climb higher</p>
 
-  <main>
-    <!-- HOME -->
-    <section id="screen-home" class="screen active">
-      <img src="/icon.svg" class="hero-icon" alt="" />
-      <h1 class="logo">CENAILLION</h1>
-      <p class="tagline">7 WWE categories. 25 seconds each.<br />Name the <b>rarest</b> answer you can think of.</p>
-      <div class="mode-btns">
-        <button class="btn primary" id="dailyBtn">Daily Card</button>
-        <button class="btn" id="randomBtn">Random Match</button>
+      <div class="tier-ladder" id="legend"></div>
+
+      <button class="px-btn big" id="dailyBtn">▶ ENTER THE ARENA ◀</button>
+      <div class="home-row">
+        <span class="card-no" id="dailyNote"></span>
+        <button class="px-btn small" id="randomBtn">RANDOM MATCH ∞</button>
       </div>
-      <p class="sub" id="dailyNote"></p>
-      <div class="legend" id="legend"></div>
-      <p class="sub small" id="bestNote"></p>
-      <p class="sub small"><span id="catCount"></span> categories in the locker room</p>
-    </section>
+      <p class="home-foot"><span id="bestNote"></span><span id="catCount"></span> categories in the locker room</p>
+    </div>
+  </section>
 
-    <!-- GAME -->
-    <section id="screen-game" class="screen">
-      <div class="hud">
+  <!-- GAME -->
+  <section id="screen-game" class="screen">
+    <div class="hud">
+      <div class="hud-box">
+        <div class="hud-label">SPOT</div>
+        <div class="hud-val" id="spotVal">BACKSTAGE</div>
+      </div>
+      <div class="hud-mid">
         <div class="pips" id="pips"></div>
-        <div class="score"><span id="scoreVal">0</span> pts</div>
+        <div class="hud-label">MATCH <span id="roundNum">1</span> OF 7</div>
       </div>
-      <div class="cat-card">
-        <div class="cat-label">Category <span id="roundNum">1</span>/7</div>
-        <h2 id="catName">—</h2>
-        <p class="cat-hint" id="catHint"></p>
-        <div class="timer"><div class="timer-fill" id="timerFill"></div><span id="timerText">25</span></div>
+      <div class="hud-box right">
+        <div class="hud-label">SCORE</div>
+        <div class="hud-val gold" id="scoreVal">0</div>
       </div>
+    </div>
 
-      <div class="arena-wrap">
-        <div class="arena" id="arena">
-          <svg viewBox="0 0 360 400" class="arena-svg" aria-hidden="true">
-            <defs>
-              <radialGradient id="spot" cx="50%" cy="45%" r="60%">
-                <stop offset="0%" stop-color="#2a2a52" />
-                <stop offset="100%" stop-color="#0b0b14" />
-              </radialGradient>
-              <linearGradient id="mat" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#f4f1ea" />
-                <stop offset="1" stop-color="#d8d3c6" />
-              </linearGradient>
-            </defs>
-            <rect width="360" height="400" fill="url(#spot)" />
-            <!-- z6 stands -->
-            <g class="zone" data-z="6">
-              <rect class="zone-bg" x="6" y="6" width="348" height="62" rx="10" />
-              <g class="crowd" id="crowd"></g>
-            </g>
-            <!-- z5 front row -->
-            <g class="zone" data-z="5">
-              <rect class="zone-bg" x="20" y="74" width="320" height="30" rx="8" />
-              <g id="seats"></g>
-              <rect x="20" y="106" width="320" height="4" fill="#3a3a5c" />
-            </g>
-            <!-- z4 commentary -->
-            <g class="zone" data-z="4">
-              <rect class="zone-bg" x="96" y="116" width="168" height="28" rx="6" />
-              <rect x="110" y="126" width="140" height="14" rx="2" fill="#1c1c30" stroke="#55557a" />
-              <rect x="122" y="119" width="22" height="9" rx="1" fill="#6ad1ff" opacity=".7" />
-              <rect x="169" y="119" width="22" height="9" rx="1" fill="#6ad1ff" opacity=".7" />
-              <rect x="216" y="119" width="22" height="9" rx="1" fill="#6ad1ff" opacity=".7" />
-            </g>
-            <!-- z2 apron -->
-            <g class="zone" data-z="2">
-              <rect class="zone-bg apron" x="88" y="152" width="184" height="150" rx="4" />
-              <rect x="88" y="290" width="184" height="12" fill="#c8102e" opacity=".9" />
-              <text x="180" y="299.5" class="apron-text">CENAILLION</text>
-            </g>
-            <!-- z3 ring -->
-            <g class="zone" data-z="3">
-              <rect class="zone-bg ringmat" x="102" y="164" width="156" height="122" fill="url(#mat)" />
-              <circle cx="180" cy="225" r="26" fill="none" stroke="#c8102e" stroke-width="3" opacity=".55" />
-              <text x="180" y="231" class="ring-logo">C</text>
-              <g class="ropes">
-                <rect x="98" y="160" width="164" height="130" fill="none" stroke="#e23b4e" stroke-width="2.4" />
-                <rect x="103" y="165" width="154" height="120" fill="none" stroke="#f5f5f5" stroke-width="1.6" opacity=".8" />
-                <rect x="108" y="170" width="144" height="110" fill="none" stroke="#3b6cff" stroke-width="1.6" opacity=".8" />
-              </g>
-              <circle cx="98" cy="160" r="4" fill="#ddd" /><circle cx="262" cy="160" r="4" fill="#ddd" />
-              <circle cx="98" cy="290" r="4" fill="#ddd" /><circle cx="262" cy="290" r="4" fill="#ddd" />
-            </g>
-            <!-- z1 ramp -->
-            <g class="zone" data-z="1">
-              <path class="zone-bg" d="M150 308 L210 308 L250 394 L110 394 Z" />
-              <path d="M160 312 L200 312 L232 392 L128 392 Z" fill="#1d1d33" stroke="#4a4a77" />
-              <line x1="180" y1="314" x2="180" y2="390" stroke="#ffd23f" stroke-dasharray="4 6" opacity=".5" />
-            </g>
+    <div class="prompt px-panel">
+      <div class="prompt-label">CATEGORY <span id="roundNum2">1</span> OF 7</div>
+      <h2 id="catName">—</h2>
+      <p class="cat-hint" id="catHint"></p>
+      <button class="px-icon home-mini" id="homeBtn" aria-label="Quit to title">X</button>
+    </div>
+
+    <div class="stage-wrap" id="stageWrap">
+      <div class="stage" id="arena">
+        <canvas id="stageCanvas" width="160" height="200" aria-hidden="true"></canvas>
+        <div class="zone" data-z="6"></div>
+        <div class="zone" data-z="5"></div>
+        <div class="zone" data-z="4"></div>
+        <div class="zone" data-z="3"></div>
+        <div class="zone" data-z="2"></div>
+        <div class="zone" data-z="1"></div>
+        <div class="zone-tags" id="zoneTags"></div>
+        <div class="token" id="token" aria-hidden="true">
+          <svg viewBox="0 0 10 13" shape-rendering="crispEdges">
+            <rect x="3" y="0" width="4" height="1" fill="#2a1a0a"/>
+            <rect x="3" y="1" width="4" height="3" fill="#e8b48a"/>
+            <rect x="4" y="2" width="1" height="1" fill="#111"/><rect x="6" y="2" width="1" height="1" fill="#111"/>
+            <rect x="1" y="4" width="8" height="3" fill="#e8b48a"/>
+            <rect x="0" y="4" width="1" height="2" fill="#e8b48a"/><rect x="9" y="4" width="1" height="2" fill="#e8b48a"/>
+            <rect x="2" y="7" width="6" height="1" fill="#ffcc33"/><rect x="4" y="7" width="2" height="1" fill="#fff3b0"/>
+            <rect x="2" y="8" width="6" height="2" fill="#e8173b"/>
+            <rect x="2" y="10" width="2" height="2" fill="#e8b48a"/><rect x="6" y="10" width="2" height="2" fill="#e8b48a"/>
+            <rect x="2" y="12" width="2" height="1" fill="#111"/><rect x="6" y="12" width="2" height="1" fill="#111"/>
           </svg>
-          <div class="zone-tags" id="zoneTags"></div>
-          <div class="token" id="token"><span>★</span></div>
-          <div class="land-pop" id="landPop"></div>
         </div>
+        <div class="land-pop" id="landPop"></div>
       </div>
+    </div>
 
+    <div class="bottom">
+      <div class="timer" id="timer"><div class="timer-fill" id="timerFill"></div><span id="timerText">25</span></div>
       <form id="answerForm" class="answer-form" autocomplete="off">
-        <input id="answerInput" type="text" placeholder="Type the rarest answer…" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="go" />
-        <button class="btn primary" type="submit" id="submitBtn">Lock in</button>
+        <input id="answerInput" type="text" placeholder="type the rarest answer…" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="go" />
+        <button class="px-btn" type="submit" id="submitBtn">LOCK IN</button>
       </form>
       <p class="feedback" id="feedback"></p>
 
-      <div class="result" id="result" hidden>
+      <div class="result px-panel" id="result" hidden>
         <div class="result-main">
           <div class="result-answer" id="resAnswer"></div>
           <div class="result-tier" id="resTier"></div>
         </div>
         <div class="result-more" id="resMore"></div>
-        <button class="btn primary" id="nextBtn">Next category →</button>
+        <button class="px-btn wide" id="nextBtn">NEXT MATCH ▶</button>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- END -->
-    <section id="screen-end" class="screen">
-      <h2 class="end-title">Final Bell</h2>
-      <div class="final-score"><span id="finalScore">0</span><small>/ 700</small></div>
+  <!-- END -->
+  <section id="screen-end" class="screen">
+    <div class="end-inner">
+      <div class="marquee">** FINAL BELL **</div>
+      <div class="final-score"><span id="finalScore">0</span><small>/700</small></div>
       <div class="rank" id="rankName"></div>
       <div class="emoji-line" id="emojiLine"></div>
       <ol class="recap" id="recap"></ol>
-      <div class="mode-btns">
-        <button class="btn primary" id="shareBtn">Share result</button>
-        <button class="btn" id="againBtn">Random Match</button>
+      <button class="px-btn big" id="shareBtn">▶ SHARE RESULT ◀</button>
+      <div class="home-row">
+        <button class="px-btn small" id="againBtn">RANDOM MATCH ∞</button>
+        <button class="px-btn small ghost" id="endHomeBtn">TITLE SCREEN</button>
       </div>
-      <p class="sub small" id="shareNote"></p>
-    </section>
-  </main>
+      <p class="home-foot" id="shareNote"></p>
+    </div>
+  </section>
 
-  <dialog id="helpDlg">
-    <h3>How to play</h3>
-    <p>You get <b>7 random WWE categories</b> and <b>25 seconds</b> for each. Type an answer that fits — the rarer it is, the further it climbs into the arena.</p>
-    <div class="legend" id="legend2"></div>
-    <p>Wrong or unknown answers don't end your turn — keep firing until the clock runs out. Nicknames and last names usually work (e.g. "Taker", "Stone Cold", "Cena").</p>
+  <dialog id="helpDlg" class="px-panel">
+    <h3>HOW TO PLAY</h3>
+    <p>You get <b>7 WWE categories</b> and <b>25 seconds</b> each. Type an answer that fits — the rarer it is, the higher your wrestler climbs, from the entrance ramp all the way into the cheap seats.</p>
+    <div class="tier-ladder compact" id="legend2"></div>
+    <p>Wrong answers don't end your turn — keep firing until the clock hits zero. Nicknames and last names usually work ("Taker", "Stone Cold", "Cena").</p>
     <p>The <b>Daily Card</b> is the same for everyone each day. <b>Random Match</b> is endless.</p>
-    <button class="btn primary" id="closeHelp">Got it</button>
+    <button class="px-btn wide" id="closeHelp">GOT IT</button>
   </dialog>
 
   <script src="/js/aliases.js"></script>
@@ -174,6 +154,7 @@
   <script src="/js/data/more2.js"></script>
   <script src="/js/data/more3.js"></script>
   <script src="/js/data/requested.js"></script>
+  <script src="/js/arena.js"></script>
   <script src="/js/game.js"></script>
 </body>
 </html>

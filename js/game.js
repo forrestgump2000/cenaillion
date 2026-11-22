@@ -5,15 +5,15 @@
   const SECONDS = 25;
   const TIERS = [
     null,
-    { id: 1, name: 'Entrance Ramp', pts: 10, color: '#a9b1c6', emoji: '⬜', desc: 'Popular answer', side: 'l', y: 88 },
-    { id: 2, name: 'On the Apron', pts: 15, color: '#4aa3ff', emoji: '🟦', desc: 'Relatively popular', side: 'r', y: 74 },
-    { id: 3, name: 'In the Ring', pts: 30, color: '#35d07f', emoji: '🟩', desc: 'Kind of popular', side: 'l', y: 55.5 },
-    { id: 4, name: 'Commentary Desk', pts: 60, color: '#ffd23f', emoji: '🟨', desc: 'Rare answer', side: 'r', y: 32.5 },
-    { id: 5, name: 'Front Row Seat', pts: 85, color: '#ff8a2a', emoji: '🟧', desc: 'Very rare answer', side: 'l', y: 22.3 },
-    { id: 6, name: 'In the Stands', pts: 100, color: '#ff3b6b', emoji: '🟥', desc: 'One in a Cenaillion', side: 'r', y: 9.3 },
+    { id: 1, name: 'Entrance Ramp', pts: 10, color: '#b8b3d9', emoji: '⬜', desc: 'Popular answer', side: 'l' },
+    { id: 2, name: 'On the Apron', pts: 15, color: '#3e9bff', emoji: '🟦', desc: 'Relatively popular', side: 'r' },
+    { id: 3, name: 'In the Ring', pts: 30, color: '#2fd17a', emoji: '🟩', desc: 'Kind of popular', side: 'l' },
+    { id: 4, name: 'Commentary Desk', pts: 60, color: '#ffcc33', emoji: '🟨', desc: 'Rare answer', side: 'r' },
+    { id: 5, name: 'Front Row Seat', pts: 85, color: '#ff7a2f', emoji: '🟧', desc: 'Very rare answer', side: 'l' },
+    { id: 6, name: 'In the Stands', pts: 100, color: '#ff3e7f', emoji: '🟥', desc: 'One in a Cenaillion', side: 'r' },
   ];
-  // token landing spots (% of arena box)
-  const SPOTS = [null, [50, 88], [50, 74], [50, 55.5], [50, 32.5], [50, 22.3], [50, 9.3]];
+  // token landing spots (% of the pixel stage)
+  const SPOTS = window.Arena.SPOTS.map((p) => (p ? [(p[0] / window.Arena.W) * 100, (p[1] / window.Arena.H) * 100] : null));
 
   const $ = (id) => document.getElementById(id);
   const store = {
@@ -144,28 +144,29 @@
 
   function buildLegend(el) {
     el.innerHTML = TIERS.slice(1).reverse().map((t) =>
-      `<div class="legend-row"><span class="dot" style="background:${t.color}"></span><span class="nm">${t.name}<small>${t.desc}</small></span><span class="pt" style="color:${t.color}">+${t.pts}</span></div>`).join('');
+      `<div class="tier-row"><span class="sw" style="background:${t.color};color:${t.color}"></span><span class="nm" style="color:${t.color}">${t.name.toUpperCase()}<small>${t.desc}</small></span><span class="pt" style="color:${t.color}">+${t.pts}</span></div>`).join('');
   }
 
   function buildArena() {
-    const crowd = $('crowd');
-    const colors = ['#ff3b6b', '#ffd23f', '#4aa3ff', '#35d07f', '#ff8a2a', '#c9c9e0', '#b46bff'];
-    let html = '';
-    const r = mulberry32(7);
-    for (let row = 0; row < 4; row++) {
-      for (let x = 16 + (row % 2) * 6; x < 350; x += 12) {
-        const y = 16 + row * 14;
-        const c = colors[Math.floor(r() * colors.length)];
-        html += `<circle cx="${x}" cy="${y}" r="4.2" fill="${c}" opacity="${0.45 + r() * 0.4}"/>`;
-        if (r() < 0.12) html += `<rect x="${x - 1}" y="${y - 14}" width="2" height="8" fill="#fff" opacity=".6"/>`;
-      }
-    }
-    crowd.innerHTML = html;
-    let seats = '';
-    for (let x = 30; x < 336; x += 16) seats += `<rect x="${x}" y="80" width="11" height="17" rx="2" fill="#3b3b66"/><circle cx="${x + 5.5}" cy="84" r="3.6" fill="#d9a57e" opacity=".85"/>`;
-    $('seats').innerHTML = seats;
+    document.querySelectorAll('.zone').forEach((z) => {
+      const [x, y, w, h] = window.Arena.ZONES[z.dataset.z];
+      Object.assign(z.style, { left: x + '%', top: y + '%', width: w + '%', height: h + '%' });
+    });
     $('zoneTags').innerHTML = TIERS.slice(1).map((t) =>
-      `<div class="ztag ${t.side}" data-z="${t.id}" style="top:${t.y}%;color:${t.color}"><span>+${t.pts} ${t.name.toUpperCase()}</span></div>`).join('');
+      `<div class="ztag ${t.side}" data-z="${t.id}" style="top:${SPOTS[t.id][1]}%;color:${t.color}"><span>+${t.pts} ${t.name.split(' ').pop().toUpperCase()}</span></div>`).join('');
+    window.Arena.start($('bg'), $('stageCanvas'));
+    window.addEventListener('resize', fitStage);
+    if (window.ResizeObserver) new ResizeObserver(fitStage).observe($('stageWrap'));
+  }
+
+  // Scale the 160x200 pixel stage to the biggest whole-ish size that fits.
+  function fitStage() {
+    const wrap = $('stageWrap'), st = $('arena');
+    if (!wrap.offsetParent) return;
+    const r = wrap.getBoundingClientRect();
+    const k = Math.max(1, Math.min((r.width - 12) / window.Arena.W, (r.height - 12) / window.Arena.H));
+    st.style.width = Math.floor(window.Arena.W * k) + 'px';
+    st.style.height = Math.floor(window.Arena.H * k) + 'px';
   }
 
   function resetArena() {
@@ -190,7 +191,10 @@
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (tier === 0) {
       const pop = $('landPop');
-      pop.style.color = '#8a8aa8';
+      pop.style.color = '#9c95c9';
+      pop.style.top = '50%';
+      $('spotVal').textContent = 'NO SHOW';
+      const st = $('arena'); st.classList.remove('shake'); void st.offsetWidth; st.classList.add('shake');
       pop.innerHTML = 'NO SHOW<small>0 PTS</small>';
       pop.classList.add('go');
       beep(140, 0.3, 'sawtooth', 0.05);
@@ -199,23 +203,25 @@
     }
     tok.classList.add('show');
     zone(1).classList.add('lit'); tag(1).classList.add('hit');
+    $('spotVal').textContent = TIERS[1].name.toUpperCase();
     beep(330, 0.06);
     const hop = reduce ? 60 : Math.max(120, 170 - tier * 8);
     for (let z = 2; z <= tier; z++) {
       const [x0, y0] = SPOTS[z - 1], [x1, y1] = SPOTS[z];
       const arc = Math.min(10, (y0 - y1) * 0.6);
       const anim = tok.animate([
-        { left: x0 + '%', top: y0 + '%', transform: 'translate(-50%,-50%) scale(1,1)' },
-        { left: (x0 + x1) / 2 + '%', top: Math.min(y0, y1) - arc + '%', transform: 'translate(-50%,-50%) scale(.9,1.12)', offset: 0.5 },
-        { left: x1 + '%', top: y1 + '%', transform: 'translate(-50%,-50%) scale(1.15,.85)' },
+        { left: x0 + '%', top: y0 + '%', transform: 'translate(-50%,-80%) scale(1,1)' },
+        { left: (x0 + x1) / 2 + '%', top: Math.min(y0, y1) - arc + '%', transform: 'translate(-50%,-80%) scale(.9,1.12)', offset: 0.5 },
+        { left: x1 + '%', top: y1 + '%', transform: 'translate(-50%,-80%) scale(1.15,.85)' },
       ], { duration: hop, easing: 'ease-in-out', fill: 'forwards' });
       await anim.finished;
       tok.style.left = x1 + '%'; tok.style.top = y1 + '%';
       zone(z - 1).classList.remove('lit');
       zone(z).classList.add('lit'); tag(z).classList.add('hit');
+      $('spotVal').textContent = TIERS[z].name.toUpperCase();
       beep(330 * Math.pow(1.19, z), 0.06);
     }
-    tok.animate([{ transform: 'translate(-50%,-50%) scale(1.5)' }, { transform: 'translate(-50%,-50%) scale(1)' }], { duration: 220, easing: 'ease-out' });
+    tok.animate([{ transform: 'translate(-50%,-80%) scale(1.5)' }, { transform: 'translate(-50%,-80%) scale(1)' }], { duration: 220, easing: 'ease-out' });
     const t = TIERS[tier];
     const fz = zone(tier);
     fz.classList.remove('lit'); fz.classList.add('final'); fz.style.setProperty('--zc', t.color);
@@ -223,8 +229,8 @@
     arena.classList.remove('flash'); void arena.offsetWidth; arena.classList.add('flash');
     const pop = $('landPop');
     pop.style.color = t.color;
-    pop.style.top = tier >= 5 ? '45%' : tier === 4 ? '18%' : '40%';
-    pop.innerHTML = `+${t.pts}<small>${t.name.toUpperCase()}${tier === 6 ? ' · ONE IN A CENAILLION' : ''}</small>`;
+    pop.style.top = (tier >= 4 ? Math.min(SPOTS[tier][1] + 20, 60) : SPOTS[tier][1] - 24) + '%';
+    pop.innerHTML = `+${t.pts}<small>${tier === 6 ? 'ONE IN A CENAILLION' : t.name.toUpperCase()}</small>`;
     pop.classList.add('go');
     if (tier >= 5) bell(); else beep(660, 0.15, 'triangle', 0.06);
   }
@@ -242,6 +248,7 @@
     if (!daily) store.set('recent', [...cats.map((c) => c.name), ...recent].slice(0, 120));
     state = { mode, cats, round: 0, score: 0, results: [], locked: false };
     show('screen-game');
+    requestAnimationFrame(fitStage);
     renderPips();
     startRound();
   }
@@ -249,7 +256,7 @@
   function renderPips() {
     $('pips').innerHTML = state.cats.map((_, i) => {
       const r = state.results[i];
-      const bg = r ? (r.tier ? TIERS[r.tier].color : '#55556e') : '';
+      const bg = r ? (r.tier ? TIERS[r.tier].color : '#3a3366') : '';
       return `<span class="pip ${i === state.round && !r ? 'cur' : ''}" style="${bg ? 'background:' + bg : ''}"></span>`;
     }).join('');
     $('scoreVal').textContent = state.score;
@@ -260,6 +267,8 @@
     state.locked = false;
     state.tries = [];
     $('roundNum').textContent = state.round + 1;
+    $('roundNum2').textContent = state.round + 1;
+    $('spotVal').textContent = 'BACKSTAGE';
     $('catName').textContent = cat.name;
     $('catHint').textContent = cat.hint || '';
     $('feedback').textContent = ''; $('feedback').className = 'feedback';
@@ -334,7 +343,7 @@
   function showResult(cat, answer, tier, pts) {
     const t = TIERS[tier];
     $('resAnswer').textContent = answer ? answer.display : 'No answer';
-    $('resTier').innerHTML = tier ? `<span style="color:${t.color}">+${pts} · ${t.name}</span>` : '<span style="color:#8a8aa8">0 pts</span>';
+    $('resTier').innerHTML = tier ? `<span style="color:${t.color}">+${pts} · ${t.name}</span>` : '<span style="color:#9c95c9">0 pts</span>';
     // show some rarer answers
     const rarer = cat.answers.filter((a) => a.tier > tier && a.tier >= 4);
     const target = rarer.length ? rarer : cat.answers.filter((a) => a.tier === 6 && (!answer || a !== answer));
@@ -343,7 +352,7 @@
       ? (tier === 6 ? 'Other answers in the stands: ' : 'Rarer picks: ') +
         sample.map((a) => `<b>${esc(a.display)}</b> <span style="color:${TIERS[a.tier].color}">(+${TIERS[a.tier].pts})</span>`).join(', ')
       : '';
-    $('nextBtn').textContent = state.round + 1 >= ROUNDS ? 'See final results →' : 'Next category →';
+    $('nextBtn').textContent = state.round + 1 >= ROUNDS ? 'FINAL BELL ▶' : 'NEXT MATCH ▶';
     $('result').hidden = false;
     $('nextBtn').focus({ preventScroll: true });
     $('result').scrollIntoView({ block: 'nearest', behavior: 'smooth' });
@@ -379,8 +388,8 @@
     $('rankName').textContent = rankFor(sum.score);
     $('emojiLine').textContent = sum.results.map((r) => (r.tier ? TIERS[r.tier].emoji : '⬛')).join('');
     $('recap').innerHTML = sum.results.map((r) => {
-      const c = r.tier ? TIERS[r.tier].color : '#55556e';
-      return `<li style="--c:${c}"><span class="rc">${esc(r.cat)}</span><span class="rp">+${r.pts}</span><span class="ra">${r.answer ? esc(r.answer) : '<i style="color:#8a8aa8">no answer</i>'}${r.tier ? ` <small style="color:${c}">· ${TIERS[r.tier].name}</small>` : ''}</span></li>`;
+      const c = r.tier ? TIERS[r.tier].color : '#3a3366';
+      return `<li style="--c:${c}"><span class="rc">${esc(r.cat)}</span><span class="rp">+${r.pts}</span><span class="ra">${r.answer ? esc(r.answer) : '<i style="color:#9c95c9">no answer</i>'}${r.tier ? ` <small style="color:${c}">· ${TIERS[r.tier].name}</small>` : ''}</span></li>`;
     }).join('');
     $('shareNote').textContent = already ? "You've already played today's Daily Card — come back tomorrow!" : '';
     state = state || {};
@@ -402,7 +411,7 @@
   function renderHome() {
     show('screen-home');
     const done = store.get('daily_' + todayStr(), null);
-    $('dailyNote').textContent = done ? `Today's Daily Card: ${done.score}/700 ✔` : 'New Daily Card every day.';
+    $('dailyNote').textContent = done ? `TODAY: ${done.score}/700` : 'NEW CARD DAILY';
     const best = store.get('best', 0);
     $('bestNote').textContent = best ? `Personal best: ${best}/700` : '';
     $('catCount').textContent = CATS.length;
@@ -417,7 +426,8 @@
   $('soundBtn').onclick = () => { muted = !muted; store.set('muted', muted); $('soundBtn').textContent = muted ? '🔇' : '🔊'; };
   $('helpBtn').onclick = () => $('helpDlg').showModal();
   $('closeHelp').onclick = () => $('helpDlg').close();
-  $('homeBtn').onclick = () => { if (state && state.locked === false && !confirm('Leave this match?')) return; state = null; renderHome(); };
+  $('homeBtn').onclick = () => { if (state && state.locked === false && !confirm('Leave this match?')) return; cancelAnimationFrame(timerRAF); state = null; renderHome(); };
+  $('endHomeBtn').onclick = () => { state = null; renderHome(); };
   $('dailyBtn').onclick = () => startGame('daily');
   $('randomBtn').onclick = () => startGame('random');
   $('againBtn').onclick = () => startGame('random');
