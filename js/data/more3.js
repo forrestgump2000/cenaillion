@@ -20,7 +20,7 @@ addCats(`
 1: Triple H, Stephanie McMahon, Randy Savage, Miss Elizabeth, Edge, Vickie Guerrero, Kane, Lita, Daniel Bryan, AJ Lee
 2: Lana, Bobby Lashley, Rusev, Liv Morgan, Teddy Long, Kristal Marshall, Test, Billy Gunn, Chuck Palumbo, Rico, Mae Young, Mark Henry, Booker T, Sharmell, Brie Bella, Nikki Bella, John Cena
 
-@Famous Undefeated Streak or Record Reign
+@Famous Undefeated Streak or Record Reign [group: streak]
 1: Undertaker, Goldberg, Asuka, Roman Reigns, CM Punk, Gunther, Hulk Hogan, Bruno Sammartino, Honky Tonk Man
 2: Rusev, Umaga, Tatanka, Ryback, Andre the Giant, Charlotte Flair, Bianca Belair, Bayley, Becky Lynch, Ronda Rousey, Bobby Lashley, Braun Strowman, Oba Femi, Bron Breakker, Rhea Ripley, Iyo Sky, Kofi Kingston, Nia Jax
 3: Shayna Baszler, Adam Cole, Brodus Clay, Karrion Kross, Omos
@@ -56,7 +56,7 @@ addCats(`
 1: Mick Foley, Bray Wyatt, Cody Rhodes, Undertaker, Chad Gable, Matt Hardy, Nikki Cross
 2: Jeff Hardy, Bo Dallas, Sting, Kane, Goldust, X-Pac, LA Knight, Christopher Daniels, Hardcore Holly, Hulk Hogan, The Rock, Steve Austin, Shawn Michaels, Finn Balor, Sami Zayn, Owen Hart, Gregory Helms, Damien Sandow
 
-@Wrestled a Celebrity at WrestleMania ~ Opposed a non-wrestler in a match
+@Wrestled a Celebrity at WrestleMania ~ Opposed a non-wrestler in a match [group: celebopp]
 1: Big Show, Seth Rollins, Roddy Piper, The Miz
 2: Bam Bam Bigelow, Paul Orndorff, Michelle McCool, Layla, Dolph Ziggler, Vickie Guerrero, John Morrison, Austin Theory, Vince McMahon, Sami Zayn, Rey Mysterio, Dominik Mysterio, Beth Phoenix, Eve Torres, Bart Gunn
 

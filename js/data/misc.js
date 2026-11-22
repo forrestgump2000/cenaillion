@@ -176,7 +176,7 @@ addCats(`
 2: Scott Hall, X-Pac, Shawn Michaels, Road Dogg, Billy Gunn, The Godfather, JBL, R-Truth, Booker T
 3: Honky Tonk Man, Jimmy Hart, Rick Martel, Buff Bagwell, Scott Steiner, Konnan, Rikishi, Carlito, Montez Ford, Angelo Dawkins, LA Knight
 
-@Wrestler Who Was a Pro Athlete Before Wrestling
+@Wrestler Who Was a Pro Athlete Before Wrestling [group: athlete]
 1: Roman Reigns, Bill Goldberg, Brock Lesnar, Ron Simmons, Lex Luger, Kurt Angle, Mark Henry
 2: Baron Corbin, Brian Pillman, Ernie Ladd, Wahoo McDaniel, Ronda Rousey, Chad Gable, Gable Steveson, Darren Drozdov, Steve McMichael, Kevin Greene, Lawrence Taylor
 3: Akebono, Butterbean, Tyson Fury, Cain Velasquez, Ken Patera, Dick the Bruiser, Leo Nomellini, Bronko Nagurski, Karl Malone, Dennis Rodman, Shaquille O'Neal

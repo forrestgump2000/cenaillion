@@ -46,19 +46,19 @@ addCats(`
 2: Linda McMahon, Vince McMahon Sr., Marissa Mazzola
 3: Jess McMahon
 
-@Second-Generation (or More) Wrestler ~ A parent also wrestled
+@Second-Generation (or More) Wrestler ~ A parent also wrestled [group: family]
 1: The Rock, Randy Orton, Charlotte Flair, Cody Rhodes, Roman Reigns, Jey Uso, Jimmy Uso, Dominik Mysterio
 2: Bret Hart, Owen Hart, Natalya, Ted DiBiase Jr., Bray Wyatt, Bo Dallas, Dustin Rhodes, Curtis Axel, Solo Sikoa, Tamina, Chavo Guerrero, Eddie Guerrero, Kerry Von Erich, Greg Valentine, David Flair
 3: Harry Smith, Ricky Steamboat Jr., Lacey Von Erich, Ross Von Erich, Marshall Von Erich, Brian Christopher, Manu, Erik Watts, Sam Houston, Barry Windham, Kendall Windham, Bob Orton Jr., Dory Funk Jr., Terry Funk, Kevin Von Erich, David Von Erich, Lance Anoa'i
 4: Bobby Duncum Jr., Brian Pillman Jr., Joseph Fatu, Chris Von Erich
 
-@Real-Life Married Wrestling Couple ~ Name either partner
+@Real-Life Married Wrestling Couple ~ Name either partner [group: couple]
 1: Triple H, Stephanie McMahon, Randy Savage, Miss Elizabeth, Seth Rollins, Becky Lynch, Daniel Bryan, Brie Bella, The Miz, Maryse
 2: Undertaker, Michelle McCool, Edge, Beth Phoenix, Jimmy Uso, Naomi, Natalya, Tyson Kidd, Mike Kanellis, Maria Kanellis, Rusev, Lana, Bianca Belair, Montez Ford, Johnny Gargano, Candice LeRae, Matt Hardy, Jon Moxley, Renee Paquette
 3: Goldust, Terri Runnels, Sable, Brock Lesnar, Buddy Matthews, Rhea Ripley, Ronda Rousey, Travis Browne, Zelina Vega, Malakai Black, Shawn Spears, Cassie Lee
 4: Kevin Sullivan
 
-@Brothers (or Sisters) Who Both Wrestled
+@Brothers (or Sisters) Who Both Wrestled [group: family]
 1: Jeff Hardy, Matt Hardy, Bret Hart, Owen Hart, Jey Uso, Jimmy Uso, Brie Bella, Nikki Bella, Cody Rhodes, Dustin Rhodes
 2: Rick Steiner, Scott Steiner, Bray Wyatt, Bo Dallas, Kerry Von Erich, Kevin Von Erich, Eddie Guerrero, Booker T, Stevie Ray, Solo Sikoa, Julius Creed, Brutus Creed, Jacques Rougeau, Raymond Rougeau
 3: Jay Briscoe, Mark Briscoe, Matt Jackson, Nick Jackson, Austin Gunn, Colten Gunn, Afa, Sika, David Von Erich, Mike Von Erich, Chris Von Erich, Dory Funk Jr., Terry Funk, Gerald Brisco, Jack Brisco, Tama Tonga, Tanga Loa
